@@ -1,0 +1,105 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: Commandes retenues en zone curated (une ligne par commande).
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+              config:
+                where: "customer_dq_flag is null"
+      - name: order_status
+        data_tests:
+          - accepted_values:
+              values: [PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED, RETURNED]
+      - name: currency
+        data_tests:
+          - accepted_values:
+              values: [XOF, GHS, NGN]
+      - name: country_code
+        data_tests:
+          - accepted_values:
+              values: [SEN, GHA, NGA, CIV]
+
+  - name: stg_order_lines
+    description: Lignes de commande valides (produit connu, commande retenue).
+    columns:
+      - name: order_line_id
+        data_tests: [unique, not_null]
+      - name: order_id
+        data_tests:
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: product_id
+        data_tests:
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+
+  - name: stg_customers
+    description: Clients avec e-mail et telephone haches (SHA-256 + sel).
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+      - name: master_customer_id
+        data_tests: [not_null]
+      - name: gender
+        data_tests:
+          - accepted_values:
+              values: [M, F, OTHER, NOT_DECLARED]
+
+  - name: stg_products
+    description: Catalogue produits, avec dq_flag pour les produits signales.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+      - name: category_name
+        data_tests:
+          - accepted_values:
+              values: ["Mode", "Électronique", "Maison", "Beauté", "Alimentation", "Bébé & Enfant", "Sport", "Téléphonie"]
+
+  - name: stg_payments
+    description: Paiements des commandes retenues ; is_selected marque le paiement CAPTURED retenu.
+    columns:
+      - name: payment_id
+        data_tests: [unique, not_null]
+      - name: order_id
+        data_tests:
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: payment_status
+        data_tests:
+          - accepted_values:
+              values: [PENDING, AUTHORIZED, CAPTURED, FAILED, REFUNDED]
+      - name: payment_method
+        data_tests:
+          - accepted_values:
+              values: [OM_MOBILE_MONEY, WAVE, MTN_MOMO, CARD, COD, BANK_TRANSFER]
+
+  - name: stg_deliveries
+    description: Livraisons des commandes retenues, avec delai et indicateur de retard.
+    columns:
+      - name: delivery_id
+        data_tests: [unique, not_null]
+      - name: order_id
+        data_tests:
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: delivery_status
+        data_tests:
+          - accepted_values:
+              values: [PREPARING, IN_TRANSIT, OUT_FOR_DELIVERY, DELIVERED, FAILED, RETURNED_TO_WAREHOUSE]
+
+  - name: stg_quarantine
+    description: Enregistrements rejetes par la zone curated, avec le motif.
+  - name: stg_currency_rates
+    description: Taux de conversion vers la devise de reference.

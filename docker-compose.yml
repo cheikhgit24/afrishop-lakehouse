@@ -25,7 +25,24 @@ x-airflow-common: &airflow-common
       condition: service_healthy
 
 services:
-  postgres:
+  postgres:  dbt:
+    build:
+      context: .
+      dockerfile: infra/dbt/Dockerfile
+    image: afrishop-dbt:latest
+    profiles: ["tools"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: postgres
+      DBT_PROFILES_DIR: /usr/app/dbt
+    volumes:
+      - ./dbt:/usr/app/dbt
+    networks: [afrishop-net]
+    depends_on:
+      postgres:
+        condition: service_healthy
     image: postgres:15
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
