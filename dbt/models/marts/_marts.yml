@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: Calendrier (une ligne par jour, 2024-2027).
+    columns:
+      - name: date_key
+        data_tests: [unique, not_null]
+
+  - name: dim_customer
+    description: Dimension client SCD2 (snapshot) avec membre inconnu (-1).
+    columns:
+      - name: customer_key
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests: [not_null]
+
+  - name: dim_product
+    description: Dimension produit SCD2 (snapshot).
+    columns:
+      - name: product_key
+        data_tests: [unique, not_null]
+
+  - name: dim_payment_method
+    description: Modes de paiement, avec regroupement et valeur NONE (commande sans paiement).
+    columns:
+      - name: payment_method_key
+        data_tests: [unique, not_null]
+
+  - name: dim_delivery_status
+    description: Statuts de livraison, avec valeur NO_DELIVERY.
+    columns:
+      - name: delivery_status_key
+        data_tests: [unique, not_null]
+
+  - name: fact_order_line
+    description: Table de faits, une ligne par ligne de commande.
+    columns:
+      - name: order_line_id
+        data_tests: [unique, not_null]
+      - name: customer_key
+        data_tests:
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+      - name: product_key
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_key
+      - name: order_date_key
+        data_tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: payment_method_key
+        data_tests:
+          - relationships:
+              to: ref('dim_payment_method')
+              field: payment_method_key
+      - name: delivery_status_key
+        data_tests:
+          - relationships:
+              to: ref('dim_delivery_status')
+              field: delivery_status_key
