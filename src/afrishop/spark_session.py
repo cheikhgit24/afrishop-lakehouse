@@ -6,7 +6,7 @@ from delta import configure_spark_with_delta_pip
 from pyspark.sql import SparkSession
 
 
-def get_spark(app_name: str = "afrishop") -> SparkSession:
+def get_spark(app_name: str = "afrishop", extra_packages: list[str] | None = None) -> SparkSession:
     builder = (
         SparkSession.builder.master("local[2]")
         .appName(app_name)
@@ -19,6 +19,6 @@ def get_spark(app_name: str = "afrishop") -> SparkSession:
             "org.apache.spark.sql.delta.catalog.DeltaCatalog",
         )
     )
-    spark = configure_spark_with_delta_pip(builder).getOrCreate()
+    spark = configure_spark_with_delta_pip(builder, extra_packages=extra_packages).getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     return spark

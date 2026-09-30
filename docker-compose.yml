@@ -9,6 +9,10 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
     AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
     HASH_SALT: ${HASH_SALT}
+    POSTGRES_USER: ${POSTGRES_USER}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    POSTGRES_DB: ${POSTGRES_DB}
+    POSTGRES_HOST: postgres
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
