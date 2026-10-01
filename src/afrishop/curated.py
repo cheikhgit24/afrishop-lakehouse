@@ -297,7 +297,8 @@ def main() -> None:
                               F.coalesce(*[F.col(c) for c in ("dq_reason", "dq_flag") if c in quarantine.columns]),
                               run_date).cache()
             n_q = q.count()
-            upsert(spark, q, cur / "_quarantine", ["source", "record_key", "reason"], ["source"])
+            qkeys = ["source", "record_key", "reason", "payload"]
+            upsert(spark, q.dropDuplicates(qkeys), cur / "_quarantine", qkeys, ["source"])
             q.unpersist()
         clean.unpersist()
         log_event(log, "table curated", table=name, rows_clean=n_clean, rows_quarantine=n_q, run_date=run_date)
