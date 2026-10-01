@@ -33,7 +33,7 @@ def customers_suite() -> list:
         gxe.ExpectColumnValuesToNotBeNull(column="customer_id"),
         gxe.ExpectColumnValuesToNotBeNull(column="master_customer_id"),
         gxe.ExpectColumnValuesToNotBeNull(column="email_hash", mostly=0.95),
-        gxe.ExpectColumnValuesToMatchRegex(column="email_hash", regex=r"^h[0-9a-f]{16}$", mostly=0.99),
+        gxe.ExpectColumnValuesToMatchRegex(column="email_hash", regex=r"^[0-9a-f]{64}$"),
         gxe.ExpectColumnValuesToBeBetween(column="birth_year", min_value=1930, max_value=2012, mostly=0.99),
         gxe.ExpectColumnValuesToBeInSet(column="customer_segment", value_set=["NEW", "REGULAR", "VIP", "DORMANT"]),
     ]

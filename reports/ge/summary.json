@@ -11,16 +11,9 @@
     "table": "customers",
     "rows": 81180,
     "expectations": 6,
-    "failed": 1,
-    "success": false,
-    "failures": [
-      {
-        "expectation": "expect_column_values_to_match_regex",
-        "column": "email_hash",
-        "unexpected_count": 81180,
-        "unexpected_percent": 100.0
-      }
-    ]
+    "failed": 0,
+    "success": true,
+    "failures": []
   },
   {
     "table": "products",
