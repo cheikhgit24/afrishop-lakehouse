@@ -1,0 +1,18 @@
+{
+  "actions": [
+    {
+      "name": "update_docs",
+      "site_names": [],
+      "type": "update_data_docs"
+    }
+  ],
+  "id": "275642ec-8329-4045-b710-fe84a4b2819a",
+  "name": "products_checkpoint",
+  "result_format": "SUMMARY",
+  "validation_definitions": [
+    {
+      "id": "4ec95282-ef1a-4889-9f0c-bb618d86baab",
+      "name": "products_validation"
+    }
+  ]
+}

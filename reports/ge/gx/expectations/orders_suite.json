@@ -1,0 +1,115 @@
+{
+  "expectations": [
+    {
+      "id": "bc188240-f441-422c-9437-7c3b169b47c6",
+      "kwargs": {
+        "column": "order_id"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "49ec6bcb-bc4c-4aee-801d-2fc397378485",
+      "kwargs": {
+        "column": "order_id"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_unique"
+    },
+    {
+      "id": "7ed7eac2-0a6b-49fe-a7c9-626f23c5f438",
+      "kwargs": {
+        "column": "customer_id"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "5073790f-29d5-40df-8635-c39a62a6c153",
+      "kwargs": {
+        "column": "order_status",
+        "value_set": [
+          "PENDING",
+          "CONFIRMED",
+          "PROCESSING",
+          "SHIPPED",
+          "DELIVERED",
+          "CANCELLED",
+          "RETURNED"
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "1086b04b-e1e5-4560-8a74-6c537d725edb",
+      "kwargs": {
+        "column": "currency",
+        "value_set": [
+          "XOF",
+          "GHS",
+          "NGN"
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "41fd9b70-770f-4ec6-91bc-6e8c1697d0be",
+      "kwargs": {
+        "column": "total_amount",
+        "min_value": 0.0
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "2e459bc2-f9e0-45ab-a18f-b478b8d1213d",
+      "kwargs": {
+        "column": "subtotal_amount",
+        "min_value": 0.0,
+        "mostly": 0.999
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "782571bc-48d8-4269-bedc-3fc30e154104",
+      "kwargs": {
+        "column": "order_date"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "ae4dcf60-304b-4de5-8397-16fb654affb2",
+      "kwargs": {
+        "column": "channel",
+        "value_set": [
+          "WEB",
+          "MOBILE_APP",
+          "WHATSAPP_BOT",
+          "CALL_CENTER",
+          "AGENT_BIZ"
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    }
+  ],
+  "id": "bee5277f-ee5e-4ecc-ae77-3718d5713a0b",
+  "meta": {
+    "great_expectations_version": "1.23.2"
+  },
+  "name": "orders_suite",
+  "notes": null
+}

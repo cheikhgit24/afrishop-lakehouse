@@ -1,0 +1,22 @@
+{
+  "data": {
+    "asset": {
+      "id": "2edf1b22-2797-43d4-93a4-3fd6c4a24c75",
+      "name": "payments"
+    },
+    "batch_definition": {
+      "id": "184d8d5d-de30-41ea-b885-48dadbda9d67",
+      "name": "payments_all"
+    },
+    "datasource": {
+      "id": "1cb5ad7d-6906-4aca-9b89-6b6e8dce932e",
+      "name": "src_payments"
+    }
+  },
+  "id": "e341c7a6-6a8c-4516-a7aa-79217cd0fb1b",
+  "name": "payments_validation",
+  "suite": {
+    "id": "e8ecf372-394b-4030-8c86-7e20891a3ae0",
+    "name": "payments_suite"
+  }
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "table": "orders",
+    "rows": 50000,
+    "expectations": 9,
+    "failed": 0,
+    "success": true,
+    "failures": []
+  },
+  {
+    "table": "customers",
+    "rows": 81180,
+    "expectations": 6,
+    "failed": 1,
+    "success": false,
+    "failures": [
+      {
+        "expectation": "expect_column_values_to_match_regex",
+        "column": "email_hash",
+        "unexpected_count": 81180,
+        "unexpected_percent": 100.0
+      }
+    ]
+  },
+  {
+    "table": "products",
+    "rows": 12000,
+    "expectations": 5,
+    "failed": 0,
+    "success": true,
+    "failures": []
+  },
+  {
+    "table": "payments",
+    "rows": 46141,
+    "expectations": 5,
+    "failed": 0,
+    "success": true,
+    "failures": []
+  }
+]

@@ -1,0 +1,76 @@
+{
+  "expectations": [
+    {
+      "id": "5b809835-c02c-46d7-ae60-2a1ceeca0338",
+      "kwargs": {
+        "column": "customer_id"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "8037ec18-2975-4ed0-a65d-0bd6501c29a9",
+      "kwargs": {
+        "column": "master_customer_id"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "2b88bbd2-cec1-417d-821b-4ed982e1d504",
+      "kwargs": {
+        "column": "email_hash",
+        "mostly": 0.95
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "4366b809-b59c-4c54-901c-26f3919909b0",
+      "kwargs": {
+        "column": "email_hash",
+        "mostly": 0.99,
+        "regex": "^h[0-9a-f]{16}$"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_match_regex"
+    },
+    {
+      "id": "f6ac5368-1410-4653-ab07-6e1a50ce39af",
+      "kwargs": {
+        "column": "birth_year",
+        "max_value": 2012.0,
+        "min_value": 1930.0,
+        "mostly": 0.99
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "599d9f5b-9bc1-4f77-aab9-59ce901b6b75",
+      "kwargs": {
+        "column": "customer_segment",
+        "value_set": [
+          "NEW",
+          "REGULAR",
+          "VIP",
+          "DORMANT"
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    }
+  ],
+  "id": "efcbddfc-38ce-4721-88cc-7a4bf3a7112e",
+  "meta": {
+    "great_expectations_version": "1.23.2"
+  },
+  "name": "customers_suite",
+  "notes": null
+}
