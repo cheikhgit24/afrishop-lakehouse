@@ -25,3 +25,6 @@ models:
 seeds:
   afrishop:
     +schema: staging
+
+vars:
+  as_of_date: "2026-05-01"   # date de reference des analyses (fin de la periode des donnees)

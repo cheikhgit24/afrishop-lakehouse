@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: mart_customer_rfm
+    description: >
+      Segmentation RFM par client maitre. Attention : a utiliser pour le pilotage marketing
+      uniquement, jamais pour exclure un client d'un service (risque de discrimination
+      indirecte : zones urbaines sur-representees dans les donnees).
+    columns:
+      - name: master_customer_id
+        data_tests: [unique, not_null]
+      - name: r_score
+        data_tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+      - name: f_score
+        data_tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+      - name: m_score
+        data_tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+              quote: false
+      - name: rfm_segment
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [CHAMPIONS, LOYAL, NEW_OR_PROMISING, AT_RISK, LOST, NEED_ATTENTION]
+
+  - name: mart_product_rotation
+    description: Rotation des produits actifs du catalogue, classe ABC et statut.
+    columns:
+      - name: product_id
+        data_tests: [unique, not_null]
+      - name: abc_class
+        data_tests:
+          - accepted_values:
+              values: [A, B, C]
+      - name: rotation_status
+        data_tests:
+          - accepted_values:
+              values: [ACTIVE, SLOW, DORMANT]
+
+  - name: mart_category_return_rate
+    description: Taux de retour mensuel par categorie et pays (incremental).
+    columns:
+      - name: row_key
+        data_tests: [unique, not_null]
+      - name: return_rate_pct
+        data_tests:
+          - not_null
