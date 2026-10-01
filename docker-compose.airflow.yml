@@ -1,0 +1,16 @@
+# Complements Airflow : acces aux projets dbt, rapports GE et variables dbt.
+x-airflow-extra: &airflow-extra
+  environment:
+    DBT_PROFILES_DIR: /opt/airflow/dbt
+    PYTHONPATH: /opt/airflow/src
+  volumes:
+    - ./dbt:/opt/airflow/dbt
+    - ./reports:/opt/airflow/reports
+
+services:
+  airflow-init:
+    <<: *airflow-extra
+  airflow-webserver:
+    <<: *airflow-extra
+  airflow-scheduler:
+    <<: *airflow-extra
