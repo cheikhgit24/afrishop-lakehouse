@@ -87,11 +87,11 @@ fluent_datasources:
     assets:
       orders:
         type: dataframe
-        id: e6033c0a-731e-4ba7-b0bf-c41055b0496b
+        id: d535ffae-9687-44fe-bd3a-645bc13e9e40
         batch_metadata: {}
         batch_definitions:
           orders_all:
-            id: a9699166-3882-4d13-ae25-ac9eeb8dd4e2
+            id: 3b9a4731-c75b-4cbd-a738-1598758728b1
             partitioner:
   src_customers:
     type: pandas
@@ -99,11 +99,11 @@ fluent_datasources:
     assets:
       customers:
         type: dataframe
-        id: 4ee4e44e-59f6-461c-812b-7c9ab39cd85a
+        id: 6953a65b-9a5a-4e01-b4c7-b1e5afd3452f
         batch_metadata: {}
         batch_definitions:
           customers_all:
-            id: e4c65037-2fb3-4e15-b11a-bb487aeb8e30
+            id: 52d6f8a3-102d-43a5-9dd8-9bded129f7f7
             partitioner:
   src_products:
     type: pandas
@@ -111,11 +111,11 @@ fluent_datasources:
     assets:
       products:
         type: dataframe
-        id: e819269f-b72e-48ec-a60b-a4a57ec7274f
+        id: a235e780-b839-42b3-8711-49ec37623aa8
         batch_metadata: {}
         batch_definitions:
           products_all:
-            id: a4627dc1-4fb3-4245-a5c3-68d144fa8e4e
+            id: 21459a31-8217-4d0b-a863-9882611ef0c1
             partitioner:
   src_payments:
     type: pandas
@@ -123,11 +123,11 @@ fluent_datasources:
     assets:
       payments:
         type: dataframe
-        id: 589f0a3b-c7aa-489b-8c61-00a20e344245
+        id: d4279d6d-5b1a-4ad2-b5d3-35bafb970c6c
         batch_metadata: {}
         batch_definitions:
           payments_all:
-            id: abeca179-2b3b-418a-bbe4-cc94c7700e6b
+            id: 96fd66cc-f419-4234-8c33-62966549bfe5
             partitioner:
 analytics_enabled:
 data_context_id: 0814a725-1ffc-49d5-8e7e-a9bad6a50d9f

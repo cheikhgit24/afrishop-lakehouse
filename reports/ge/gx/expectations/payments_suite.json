@@ -1,7 +1,7 @@
 {
   "expectations": [
     {
-      "id": "cc1bd465-07db-4ee5-abdf-2ce8041a7118",
+      "id": "6d6b5d8b-086a-42df-a01d-320118c01740",
       "kwargs": {
         "column": "payment_id"
       },
@@ -10,7 +10,7 @@
       "type": "expect_column_values_to_not_be_null"
     },
     {
-      "id": "0441d72b-c351-427e-b2f5-894024a60cf4",
+      "id": "f909e623-e1b3-4429-815a-ff2ccccb2088",
       "kwargs": {
         "column": "payment_id"
       },
@@ -19,7 +19,7 @@
       "type": "expect_column_values_to_be_unique"
     },
     {
-      "id": "8d00124c-08c8-451e-8004-ed22007e68d9",
+      "id": "c1a69555-0571-426a-bab0-cbdbf0fcdf8a",
       "kwargs": {
         "column": "order_id"
       },
@@ -28,7 +28,7 @@
       "type": "expect_column_values_to_not_be_null"
     },
     {
-      "id": "cfc2893b-5e56-4182-bb66-41a63ef7e489",
+      "id": "876a217d-7d8e-40aa-90a5-6afaa8141d23",
       "kwargs": {
         "column": "payment_status",
         "value_set": [
@@ -44,7 +44,7 @@
       "type": "expect_column_values_to_be_in_set"
     },
     {
-      "id": "a6d48a36-5246-4774-bde5-0485aae31542",
+      "id": "20c59099-c6c1-4af2-b0f3-8508ec475150",
       "kwargs": {
         "column": "payment_amount",
         "min_value": 0.0
