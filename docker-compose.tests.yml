@@ -1,0 +1,20 @@
+# Tests et qualite du code, executes dans l'image Airflow (Java + Spark deja installes).
+services:
+  tests:
+    build:
+      context: .
+      dockerfile: infra/tests/Dockerfile
+    image: afrishop-tests:latest
+    profiles: ["tools"]
+    environment:
+      HASH_SALT: ${HASH_SALT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: postgres
+    volumes:
+      - ./src:/opt/airflow/src
+      - ./dags:/opt/airflow/dags
+      - ./tests:/opt/airflow/tests
+      - ./pyproject.toml:/opt/airflow/pyproject.toml
+    networks: [afrishop-net]

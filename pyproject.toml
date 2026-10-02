@@ -1,0 +1,31 @@
+[tool.black]
+line-length = 110
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+files = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
+markers = ["spark: tests necessitant une session Spark (lents)"]
+
+[tool.coverage.run]
+source = ["src/afrishop"]
+omit = ["src/afrishop/__init__.py", "src/afrishop/quality/validate.py"]  # validate.py tourne dans un venv isole (voir DAG)
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 60
