@@ -1,9 +1,10 @@
-import pytest
-
-from afrishop.quality.expectations import SUITES
-
+﻿import pytest
 
 pytest.importorskip("great_expectations")
+
+from afrishop.quality.expectations import SUITES  # noqa: E402
+
+
 def test_each_suite_defines_expectations_on_its_key(name):
     expectations = SUITES[name]()
     assert len(expectations) >= 5
