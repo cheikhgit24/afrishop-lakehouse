@@ -1,11 +1,11 @@
 {
   "data": {
     "asset": {
-      "id": "d4279d6d-5b1a-4ad2-b5d3-35bafb970c6c",
+      "id": "e3445965-e5c7-449b-9231-fcbd8f9cd242",
       "name": "payments"
     },
     "batch_definition": {
-      "id": "96fd66cc-f419-4234-8c33-62966549bfe5",
+      "id": "287a1910-c986-43d1-81c0-52d2d735e699",
       "name": "payments_all"
     },
     "datasource": {
