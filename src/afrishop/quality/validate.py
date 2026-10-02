@@ -105,8 +105,10 @@ def main() -> int:
     )
     ok = all(s["success"] for s in summary)
     for s in summary:
-        print(f"{s['table']:<10} {'OK  ' if s['success'] else 'FAIL'} "
-              f"{s['expectations'] - s['failed']}/{s['expectations']} attentes OK")
+        print(
+            f"{s['table']:<10} {'OK  ' if s['success'] else 'FAIL'} "
+            f"{s['expectations'] - s['failed']}/{s['expectations']} attentes OK"
+        )
         for f in s["failures"]:
             print(f"    - {f['expectation']} ({f['column']}): {f['unexpected_count']} ecarts")
     return 0 if (ok or not args.fail_on_error) else 1

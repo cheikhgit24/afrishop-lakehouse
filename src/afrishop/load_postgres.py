@@ -43,7 +43,9 @@ def main() -> None:
             target = f"curated.{table.lstrip('_')}"
             df.write.mode("overwrite").option("truncate", "true").jdbc(url, target, properties=props)
             rows = spark.read.jdbc(url, target, properties=props).count()
-            log_event(log, "table loaded", table=target, rows=rows, duration_s=round(time.time() - started, 1))
+            log_event(
+                log, "table loaded", table=target, rows=rows, duration_s=round(time.time() - started, 1)
+            )
     finally:
         spark.stop()
 

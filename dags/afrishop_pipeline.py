@@ -41,17 +41,20 @@ def on_failure(context) -> None:
     ti = context["task_instance"]
     logger.error(
         "task_failed",
-        extra={"extra_fields": {
-            "dag_id": ti.dag_id, "task_id": ti.task_id, "run_id": context["run_id"],
-            "try_number": ti.try_number, "error": str(context.get("exception")),
-        }},
+        extra={
+            "extra_fields": {
+                "dag_id": ti.dag_id,
+                "task_id": ti.task_id,
+                "run_id": context["run_id"],
+                "try_number": ti.try_number,
+                "error": str(context.get("exception")),
+            }
+        },
     )
 
 
 def on_sla_miss(dag, task_list, blocking_task_list, slas, blocking_tis) -> None:
-    logger.warning(
-        "sla_missed", extra={"extra_fields": {"dag_id": dag.dag_id, "tasks": str(task_list)}}
-    )
+    logger.warning("sla_missed", extra={"extra_fields": {"dag_id": dag.dag_id, "tasks": str(task_list)}})
 
 
 default_args = {
@@ -88,8 +91,7 @@ def afrishop_pipeline():
         max_active_tis_per_dag=2,  # limite la memoire : 1 JVM Spark par source
     ).expand(
         bash_command=[
-            f"{SRC} && python -m afrishop.ingest_raw --run-date {{{{ ds }}}} --sources {s}"
-            for s in SOURCES
+            f"{SRC} && python -m afrishop.ingest_raw --run-date {{{{ ds }}}} --sources {s}" for s in SOURCES
         ]
     )
 
@@ -126,9 +128,15 @@ def afrishop_pipeline():
         others = [ti for ti in dag_run.get_task_instances() if ti.task_id != "record_metrics"]
         row = pipeline_metrics.summarize_run(dag_run, others)
         row = pipeline_metrics.record(row)
-        log_event(logger, "pipeline_run_recorded", run_id=row["run_id"], state=row["state"],
-                  duration_s=row["duration_s"], orders=row["orders_count"],
-                  quarantine=row["quarantine_count"])
+        log_event(
+            logger,
+            "pipeline_run_recorded",
+            run_id=row["run_id"],
+            state=row["state"],
+            duration_s=row["duration_s"],
+            orders=row["orders_count"],
+            quarantine=row["quarantine_count"],
+        )
         if row["state"] == "failed":
             raise RuntimeError(f"Pipeline en echec : {row['failed_tasks'].adapted}")
         return {"state": row["state"]}

@@ -82,13 +82,18 @@ def upsert(
 # ----------------------------------------------------------------------------- transformations
 def build_products(raw: DataFrame) -> DataFrame:
     df = latest_by(raw, "product_id", "updated_at")
-    flag = (
-        F.when(F.col("unit_price").cast("double") == 0, F.lit("ZERO_PRICE"))
-        .when(F.col("unit_cost").cast("double") > F.col("unit_price").cast("double"), F.lit("COST_GT_PRICE"))
+    flag = F.when(F.col("unit_price").cast("double") == 0, F.lit("ZERO_PRICE")).when(
+        F.col("unit_cost").cast("double") > F.col("unit_price").cast("double"), F.lit("COST_GT_PRICE")
     )
     return df.select(
-        "product_id", "sku", "product_name", "category_id", "category_name", "subcategory_name",
-        "brand", "seller_id",
+        "product_id",
+        "sku",
+        "product_name",
+        "category_id",
+        "category_name",
+        "subcategory_name",
+        "brand",
+        "seller_id",
         F.col("unit_cost").cast("decimal(10,2)").alias("unit_cost"),
         F.col("unit_price").cast("decimal(10,2)").alias("unit_price"),
         F.col("weight_grams").cast("int").alias("weight_grams"),
@@ -126,8 +131,12 @@ def build_customers(raw: DataFrame, salt: str) -> tuple[DataFrame, DataFrame]:
         F.col("birth_year").cast("int").alias("birth_year"),
         "gender",
         F.col("registration_date").cast("date").alias("registration_date"),
-        "country_code", "city", "customer_segment", "preferred_payment_method",
-        "loyalty_tier", "account_status",
+        "country_code",
+        "city",
+        "customer_segment",
+        "preferred_payment_method",
+        "loyalty_tier",
+        "account_status",
         "_ingested_at",
     )
     return clean, quarantine
@@ -139,8 +148,12 @@ def selected_payments(raw_payments: DataFrame) -> DataFrame:
         "_pd", F.col("payment_date").cast("timestamp")
     )
     w = Window.partitionBy("order_id").orderBy(F.col("_pd").desc(), F.col("payment_id"))
-    return cap.withColumn("_rn", F.row_number().over(w)).filter("_rn = 1").select(
-        "payment_id", "order_id", F.col("payment_amount").cast("decimal(12,2)").alias("captured_amount")
+    return (
+        cap.withColumn("_rn", F.row_number().over(w))
+        .filter("_rn = 1")
+        .select(
+            "payment_id", "order_id", F.col("payment_amount").cast("decimal(12,2)").alias("captured_amount")
+        )
     )
 
 
@@ -152,10 +165,18 @@ def build_orders(
     selected: DataFrame,
 ) -> tuple[DataFrame, DataFrame]:
     o = latest_by(raw_orders, "order_id", "updated_at").select(
-        "order_id", "order_number", "customer_id",
+        "order_id",
+        "order_number",
+        "customer_id",
         F.col("order_date").cast("timestamp").alias("order_date"),
-        "order_status", "channel", "country_code", "delivery_address_city",
-        "delivery_address_region", "delivery_address_zone", "promo_code", "currency",
+        "order_status",
+        "channel",
+        "country_code",
+        "delivery_address_city",
+        "delivery_address_region",
+        "delivery_address_zone",
+        "promo_code",
+        "currency",
         F.col("subtotal_amount").cast("decimal(12,2)").alias("subtotal_amount"),
         F.col("shipping_amount").cast("decimal(10,2)").alias("shipping_amount"),
         F.col("discount_amount").cast("decimal(10,2)").alias("discount_amount"),
@@ -172,9 +193,8 @@ def build_orders(
     o = o.join(lines_sum, "order_id", "left")
 
     expected = F.col("subtotal_amount") + F.col("shipping_amount") - F.col("discount_amount")
-    reason = (
-        F.when(F.col("lines_sum").isNull(), F.lit("NO_LINES"))
-        .when(F.abs(F.col("total_amount") - expected) > TOL, F.lit("BAD_TOTAL"))
+    reason = F.when(F.col("lines_sum").isNull(), F.lit("NO_LINES")).when(
+        F.abs(F.col("total_amount") - expected) > TOL, F.lit("BAD_TOTAL")
     )
     o = o.withColumn("dq_reason", reason)
 
@@ -202,19 +222,22 @@ def build_order_lines(
     raw_lines: DataFrame, raw_products: DataFrame, orders_clean: DataFrame
 ) -> tuple[DataFrame, DataFrame]:
     typed = raw_lines.select(
-        "order_line_id", "order_id", "product_id", "product_sku",
+        "order_line_id",
+        "order_id",
+        "product_id",
+        "product_sku",
         F.col("quantity").cast("int").alias("quantity"),
         F.col("unit_price").cast("decimal(10,2)").alias("unit_price"),
         F.col("line_discount").cast("decimal(10,2)").alias("line_discount"),
         F.col("line_total").cast("decimal(12,2)").alias("line_total"),
-        "seller_id", "_ingested_at",
+        "seller_id",
+        "_ingested_at",
     )
     known = raw_products.select("product_id").withColumn("_known", F.lit(True))
     kept = orders_clean.select("order_id", "order_year_month").withColumn("_order_ok", F.lit(True))
     j = typed.join(known, "product_id", "left").join(kept, "order_id", "left")
-    reason = (
-        F.when(F.col("_known").isNull(), F.lit("ORPHAN_PRODUCT"))
-        .when(F.col("_order_ok").isNull(), F.lit("ORDER_NOT_IN_CLEAN"))
+    reason = F.when(F.col("_known").isNull(), F.lit("ORPHAN_PRODUCT")).when(
+        F.col("_order_ok").isNull(), F.lit("ORDER_NOT_IN_CLEAN")
     )
     j = j.withColumn("dq_reason", reason)
     quarantine = j.filter("dq_reason IS NOT NULL")
@@ -225,23 +248,28 @@ def build_order_lines(
 def build_payments(raw: DataFrame, selected: DataFrame) -> DataFrame:
     df = latest_by(raw, "payment_id", "payment_date")
     sel = selected.select("payment_id").withColumn("is_selected", F.lit(True))
-    return (
-        df.join(sel, "payment_id", "left")
-        .select(
-            "payment_id", "order_id", "payment_method", "payment_provider",
-            F.col("payment_amount").cast("decimal(12,2)").alias("payment_amount"),
-            "currency", "payment_status",
-            F.col("payment_date").cast("timestamp").alias("payment_date"),
-            "transaction_reference",
-            F.coalesce(F.col("is_selected"), F.lit(False)).alias("is_selected"),
-            "_ingested_at",
-        )
+    return df.join(sel, "payment_id", "left").select(
+        "payment_id",
+        "order_id",
+        "payment_method",
+        "payment_provider",
+        F.col("payment_amount").cast("decimal(12,2)").alias("payment_amount"),
+        "currency",
+        "payment_status",
+        F.col("payment_date").cast("timestamp").alias("payment_date"),
+        "transaction_reference",
+        F.coalesce(F.col("is_selected"), F.lit(False)).alias("is_selected"),
+        "_ingested_at",
     )
 
 
 def build_deliveries(raw: DataFrame, orders_clean: DataFrame) -> tuple[DataFrame, DataFrame]:
     d = latest_by(raw, "delivery_id", "shipped_at").select(
-        "delivery_id", "order_id", "carrier", "tracking_number", "delivery_status",
+        "delivery_id",
+        "order_id",
+        "carrier",
+        "tracking_number",
+        "delivery_status",
         F.col("shipped_at").cast("timestamp").alias("shipped_at"),
         F.col("delivered_at").cast("timestamp").alias("delivered_at"),
         F.col("delivery_attempts").cast("int").alias("delivery_attempts"),
@@ -250,9 +278,7 @@ def build_deliveries(raw: DataFrame, orders_clean: DataFrame) -> tuple[DataFrame
     )
     o = orders_clean.select("order_id", "order_date", "order_status")
     j = d.join(o, "order_id", "left")
-    quarantine = j.filter(F.col("order_date").isNull()).withColumn(
-        "dq_reason", F.lit("ORDER_NOT_IN_CLEAN")
-    )
+    quarantine = j.filter(F.col("order_date").isNull()).withColumn("dq_reason", F.lit("ORDER_NOT_IN_CLEAN"))
     ok = (
         j.filter(F.col("order_date").isNotNull())
         .withColumn("delivery_delay_days", F.datediff("delivered_at", "order_date"))
@@ -286,53 +312,96 @@ def main() -> None:
     def raw(name: str) -> DataFrame:
         return read_raw(spark, args.data_dir, name, run_date)
 
-    def write(name: str, clean: DataFrame, keys: list[str], quarantine: DataFrame | None,
-              qsource: str | None = None, qkey: str | None = None, partition_by: list[str] | None = None) -> None:
+    def write(
+        name: str,
+        clean: DataFrame,
+        keys: list[str],
+        quarantine: DataFrame | None,
+        qsource: str | None = None,
+        qkey: str | None = None,
+        partition_by: list[str] | None = None,
+    ) -> None:
         clean = clean.cache()
         n_clean = clean.count()
         upsert(spark, clean, cur / name, keys, partition_by)
         n_q = 0
         if quarantine is not None:
-            q = to_quarantine(quarantine, qsource or name, qkey or keys[0],
-                              F.coalesce(*[F.col(c) for c in ("dq_reason", "dq_flag") if c in quarantine.columns]),
-                              run_date).cache()
+            q = to_quarantine(
+                quarantine,
+                qsource or name,
+                qkey or keys[0],
+                F.coalesce(*[F.col(c) for c in ("dq_reason", "dq_flag") if c in quarantine.columns]),
+                run_date,
+            ).cache()
             n_q = q.count()
             qkeys = ["source", "record_key", "reason", "payload"]
             upsert(spark, q.dropDuplicates(qkeys), cur / "_quarantine", qkeys, ["source"])
             q.unpersist()
         clean.unpersist()
-        log_event(log, "table curated", table=name, rows_clean=n_clean, rows_quarantine=n_q, run_date=run_date)
+        log_event(
+            log, "table curated", table=name, rows_clean=n_clean, rows_quarantine=n_q, run_date=run_date
+        )
 
     try:
         products = build_products(raw("products"))
-        write("products", products, ["product_id"], products.filter("dq_flag IS NOT NULL"),
-              qsource="products", qkey="product_id")
+        write(
+            "products",
+            products,
+            ["product_id"],
+            products.filter("dq_flag IS NOT NULL"),
+            qsource="products",
+            qkey="product_id",
+        )
 
         raw_customers = raw("customers")
         customers, cust_q = build_customers(raw_customers, salt)
-        write("customers", customers, ["customer_id"], cust_q.withColumn("dq_reason", F.lit("AMBIGUOUS_CUSTOMER_ID")),
-              qsource="customers", qkey="customer_id")
+        write(
+            "customers",
+            customers,
+            ["customer_id"],
+            cust_q.withColumn("dq_reason", F.lit("AMBIGUOUS_CUSTOMER_ID")),
+            qsource="customers",
+            qkey="customer_id",
+        )
 
         raw_payments = raw("payments")
         selected = selected_payments(raw_payments)
 
         orders, orders_q = build_orders(
-            raw("orders"), raw("order_lines"), raw("products"),
-            ambiguous_customer_ids(raw_customers), selected,
+            raw("orders"),
+            raw("order_lines"),
+            raw("products"),
+            ambiguous_customer_ids(raw_customers),
+            selected,
         )
         orders = orders.cache()
-        write("orders", orders, ["order_id"], orders_q, qsource="orders", qkey="order_id",
-              partition_by=["order_year_month"])
+        write(
+            "orders",
+            orders,
+            ["order_id"],
+            orders_q,
+            qsource="orders",
+            qkey="order_id",
+            partition_by=["order_year_month"],
+        )
 
         lines, lines_q = build_order_lines(raw("order_lines"), raw("products"), orders)
-        write("order_lines", lines, ["order_line_id"], lines_q, qsource="order_lines",
-              qkey="order_line_id", partition_by=["order_year_month"])
+        write(
+            "order_lines",
+            lines,
+            ["order_line_id"],
+            lines_q,
+            qsource="order_lines",
+            qkey="order_line_id",
+            partition_by=["order_year_month"],
+        )
 
         write("payments", build_payments(raw_payments, selected), ["payment_id"], None)
 
         deliveries, deliveries_q = build_deliveries(raw("deliveries"), orders)
-        write("deliveries", deliveries, ["delivery_id"], deliveries_q, qsource="deliveries",
-              qkey="delivery_id")
+        write(
+            "deliveries", deliveries, ["delivery_id"], deliveries_q, qsource="deliveries", qkey="delivery_id"
+        )
 
         log_event(log, "curated done", run_date=run_date, duration_s=round(time.time() - t0, 1))
     finally:

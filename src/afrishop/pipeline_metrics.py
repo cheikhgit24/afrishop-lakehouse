@@ -68,9 +68,7 @@ def curated_counts(cur) -> tuple[int | None, int | None]:
 
 def summarize_run(dag_run, task_instances) -> dict:
     """Construit la ligne de metriques a partir d'un DagRun et de ses TaskInstances."""
-    failed = sorted(
-        {ti.task_id for ti in task_instances if ti.state in ("failed", "upstream_failed")}
-    )
+    failed = sorted({ti.task_id for ti in task_instances if ti.state in ("failed", "upstream_failed")})
     started = dag_run.start_date
     ended = datetime.now(started.tzinfo) if started else None
     return {
