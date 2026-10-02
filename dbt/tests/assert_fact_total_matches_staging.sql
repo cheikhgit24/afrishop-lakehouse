@@ -2,5 +2,5 @@
 select 1
 where abs(
     (select sum(line_total) from {{ ref('fact_order_line') }})
-  - (select sum(line_total) from {{ ref('stg_order_lines') }})
+    - (select sum(line_total) from {{ ref('stg_order_lines') }})
 ) > 0.01

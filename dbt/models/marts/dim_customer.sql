@@ -30,6 +30,19 @@ from versions
 union all
 
 select
-    '-1', 'UNKNOWN', 'UNKNOWN', false, null, null, null, null, null,
-    'UNKNOWN', null, null, null,
-    timestamp '1900-01-01', timestamp '9999-12-31', true
+    '-1',
+    'UNKNOWN',
+    'UNKNOWN',
+    false,
+    null,
+    null,
+    null,
+    null,
+    null,
+    'UNKNOWN',
+    null,
+    null,
+    null,
+    timestamp '1900-01-01',
+    timestamp '9999-12-31',
+    true

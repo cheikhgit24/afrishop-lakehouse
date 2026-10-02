@@ -23,12 +23,14 @@ select
 from {{ ref('int_order_lines_enriched') }} l
 join {{ ref('int_orders_enriched') }} o on o.order_id = l.order_id
 left join {{ ref('dim_customer') }} c
-    on c.customer_id = o.customer_id
-    and o.order_date >= c.valid_from
-    and o.order_date < c.valid_to
+    on
+        c.customer_id = o.customer_id
+        and o.order_date >= c.valid_from
+        and o.order_date < c.valid_to
 join {{ ref('dim_product') }} p
-    on p.product_id = l.product_id
-    and o.order_date >= p.valid_from
-    and o.order_date < p.valid_to
+    on
+        p.product_id = l.product_id
+        and o.order_date >= p.valid_from
+        and o.order_date < p.valid_to
 join {{ ref('dim_payment_method') }} pm on pm.payment_method = o.payment_method
 join {{ ref('dim_delivery_status') }} ds on ds.delivery_status = o.delivery_status

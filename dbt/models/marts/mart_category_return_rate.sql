@@ -19,12 +19,15 @@ with lines as (
     from {{ ref('int_order_lines_enriched') }} l
     join {{ ref('int_orders_enriched') }} o on o.order_id = l.order_id
     join {{ ref('stg_products') }} p on p.product_id = l.product_id
-    where o.order_status not in ('CANCELLED', 'PENDING')
-    {% if is_incremental() %}
-      and to_char(o.order_date, 'YYYY-MM') >=
-          (select to_char(to_date(max(order_year_month), 'YYYY-MM') - interval '1 month', 'YYYY-MM')
-           from {{ this }})
-    {% endif %}
+    where
+        o.order_status not in ('CANCELLED', 'PENDING')
+        {% if is_incremental() %}
+            and to_char(o.order_date, 'YYYY-MM')
+            >= (
+                select to_char(to_date(max(order_year_month), 'YYYY-MM') - interval '1 month', 'YYYY-MM')
+                from {{ this }}
+            )
+        {% endif %}
 )
 
 select

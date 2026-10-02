@@ -1,6 +1,8 @@
 -- Une ligne par commande : attributs de la commande + paiement retenu + livraison.
 with selected_payment as (
-    select order_id, payment_method
+    select
+        order_id,
+        payment_method
     from {{ ref('stg_payments') }}
     where is_selected
 )

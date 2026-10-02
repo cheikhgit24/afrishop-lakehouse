@@ -13,8 +13,8 @@ with base as (
 scored as (
     select
         *,
-        6 - ntile(5) over (order by recency_days asc)  as r_score,
-        ntile(5) over (order by order_count asc, monetary_value asc)  as f_score,
+        6 - ntile(5) over (order by recency_days asc) as r_score,
+        ntile(5) over (order by order_count asc, monetary_value asc) as f_score,
         ntile(5) over (order by monetary_value asc) as m_score
     from base
 )

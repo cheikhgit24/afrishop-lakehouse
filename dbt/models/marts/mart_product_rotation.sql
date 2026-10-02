@@ -13,7 +13,7 @@ with stats as (
         s.units_last_90d,
         (date '{{ var("as_of_date") }}' - s.last_sale_at::date) as days_since_last_sale,
         sum(s.revenue) over (order by s.revenue desc, p.product_id)
-            / sum(s.revenue) over () as cumulative_revenue_share
+        / sum(s.revenue) over () as cumulative_revenue_share
     from {{ ref('dim_product') }} p
     join {{ ref('int_product_sales_stats') }} s on s.product_id = p.product_id
     where p.is_current
