@@ -1,4 +1,4 @@
-[tool.black]
+﻿[tool.black]
 line-length = 110
 target-version = ["py311"]
 
@@ -24,7 +24,7 @@ markers = ["spark: tests necessitant une session Spark (lents)"]
 
 [tool.coverage.run]
 source = ["src/afrishop"]
-omit = ["src/afrishop/__init__.py", "src/afrishop/quality/validate.py"]  # validate.py tourne dans un venv isole (voir DAG)
+omit = ["src/afrishop/__init__.py", "src/afrishop/quality/validate.py", "src/afrishop/quality/expectations.py"]  # testes dans le venv Great Expectations (voir README)
 
 [tool.coverage.report]
 show_missing = true
