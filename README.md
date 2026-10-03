@@ -93,3 +93,5 @@ reports/ge/            rapports Great Expectations (Data Docs HTML)
 - [Biais, limites et usages interdits](docs/bias_and_limits.md)
 - [Rapport de profilage](docs/profiling_report.md) (généré par `scripts/profile_data.py`)
 - [Journal des changements](CHANGELOG.md)
+- [Rapport final](docs/rapport_final.pdf) : synthèse du projet, résultats analytiques et recommandations pour la direction
+- Lignée dbt : [fact_order_line](docs/images/fact_order_lineage_graph.png) et [mart_customer_rfm](docs/images/mart_customer_rfm_lineage_graph.png)
