@@ -1,7 +1,7 @@
 {
   "expectations": [
     {
-      "id": "a575377d-16b6-439c-a0c0-c2953e69d3e7",
+      "id": "c3ca78fa-bd79-4569-9a6d-32463cd845f3",
       "kwargs": {
         "column": "order_id"
       },
@@ -10,7 +10,7 @@
       "type": "expect_column_values_to_not_be_null"
     },
     {
-      "id": "0305b6b9-2134-4709-902d-5d88ea3650f6",
+      "id": "2c9d5958-302a-4b6f-86c5-c99e0e12656e",
       "kwargs": {
         "column": "order_id"
       },
@@ -19,7 +19,7 @@
       "type": "expect_column_values_to_be_unique"
     },
     {
-      "id": "3eb76312-94a5-4022-a7b9-f19a271ddb92",
+      "id": "b96e79fc-d0f0-4e56-9b2c-cb98b99d306a",
       "kwargs": {
         "column": "customer_id"
       },
@@ -28,7 +28,7 @@
       "type": "expect_column_values_to_not_be_null"
     },
     {
-      "id": "35e42c60-20d1-4524-bdd3-12fc52ea7b6c",
+      "id": "7f3289e8-4c64-4220-b4df-0a28d81bfdd5",
       "kwargs": {
         "column": "order_status",
         "value_set": [
@@ -46,7 +46,7 @@
       "type": "expect_column_values_to_be_in_set"
     },
     {
-      "id": "f7a871ff-9519-4882-bdd4-3cb0ac48d946",
+      "id": "e01fb171-a6f0-424e-ad03-62af6660bf6a",
       "kwargs": {
         "column": "currency",
         "value_set": [
@@ -60,7 +60,7 @@
       "type": "expect_column_values_to_be_in_set"
     },
     {
-      "id": "4f3043dc-9c0d-4d69-912b-79909bfd41e0",
+      "id": "e1abbaad-38da-418d-a65f-b4bb357dc019",
       "kwargs": {
         "column": "total_amount",
         "min_value": 0.0
@@ -70,7 +70,7 @@
       "type": "expect_column_values_to_be_between"
     },
     {
-      "id": "31b94682-ab71-4405-a4fa-ef162eaa91c5",
+      "id": "4da45b2e-f9ad-406c-b3a4-c62a54f2f077",
       "kwargs": {
         "column": "subtotal_amount",
         "min_value": 0.0,
@@ -81,7 +81,7 @@
       "type": "expect_column_values_to_be_between"
     },
     {
-      "id": "eb9ebac4-33fa-4051-b79a-e8fcea9f15bf",
+      "id": "6ada22ac-c6ec-4664-bd0f-2090f494357c",
       "kwargs": {
         "column": "order_date"
       },
@@ -90,7 +90,7 @@
       "type": "expect_column_values_to_not_be_null"
     },
     {
-      "id": "6f3b5c26-94ba-412f-93b9-5a22546ee373",
+      "id": "7f118763-b2db-4dd3-ba5f-5a6721825268",
       "kwargs": {
         "column": "channel",
         "value_set": [
